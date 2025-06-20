@@ -1,14 +1,18 @@
 
 import React, { useState, useMemo } from 'react';
-import { Gift, Youtube } from 'lucide-react';
+import { Gift, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 import GiftCard from '@/components/GiftCard';
 import LanguageToggle from '@/components/LanguageToggle';
+import UserProfile from '@/components/UserProfile';
+import { useAuth } from '@/contexts/AuthContext';
 import { translations, Language } from '@/utils/translations';
 import { generateRandomGifts } from '@/utils/giftGenerator';
 
 const Index = () => {
   const [language, setLanguage] = useState<Language>('en');
+  const { user, loading } = useAuth();
   const t = translations[language];
 
   // Generate random gifts once per session
@@ -29,6 +33,14 @@ const Index = () => {
     }
   ];
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500">
       {/* Hero Section */}
@@ -44,7 +56,19 @@ const Index = () => {
                 {t.title}
               </h1>
             </div>
-            <LanguageToggle currentLanguage={language} onLanguageChange={setLanguage} />
+            <div className="flex items-center gap-4">
+              <LanguageToggle currentLanguage={language} onLanguageChange={setLanguage} />
+              {user ? (
+                <UserProfile />
+              ) : (
+                <Link to="/auth">
+                  <Button variant="secondary" className="flex items-center gap-2">
+                    <LogIn className="w-4 h-4" />
+                    Sign In
+                  </Button>
+                </Link>
+              )}
+            </div>
           </div>
           
           <div className="text-center text-white mb-12">
@@ -57,7 +81,7 @@ const Index = () => {
             <p className="text-sm opacity-75 mt-2">
               {language === 'en' 
                 ? 'Fresh gift ideas generated for each visit!' 
-                : 'Nye gaveideer generert for hvert besøk!'
+                : 'Nye gaveideer genererte for hvert besøk!'
               }
             </p>
           </div>
@@ -103,12 +127,6 @@ const Index = () => {
             {language === 'en' 
               ? 'Amazon links are affiliate links. We may earn a commission from purchases.' 
               : 'Amazon lenker er tilknyttede lenker. Vi kan tjene provisjon fra kjøp.'
-            }
-          </p>
-          <p className="text-xs opacity-60">
-            {language === 'en' 
-              ? 'For Google login functionality, connect this project to Supabase for authentication features.' 
-              : 'For Google innlogging funksjonalitet, koble dette prosjektet til Supabase for autentiseringsfunksjoner.'
             }
           </p>
         </div>
