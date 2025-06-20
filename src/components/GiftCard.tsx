@@ -9,11 +9,22 @@ interface GiftCardProps {
   description: string;
   amazonUrl: string;
   viewOnAmazonText: string;
+  imageUrl?: string;
 }
 
-const GiftCard = ({ title, description, amazonUrl, viewOnAmazonText }: GiftCardProps) => {
+const GiftCard = ({ title, description, amazonUrl, viewOnAmazonText, imageUrl }: GiftCardProps) => {
   return (
-    <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-gradient-to-br from-white to-purple-50 border-purple-100 hover:border-purple-200">
+    <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-gradient-to-br from-white to-purple-50 border-purple-100 hover:border-purple-200 overflow-hidden">
+      {imageUrl && (
+        <div className="relative h-48 overflow-hidden">
+          <img 
+            src={imageUrl} 
+            alt={title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+        </div>
+      )}
       <CardHeader className="text-center pb-4">
         <div className="mx-auto w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
           <Gift className="w-8 h-8 text-white" />

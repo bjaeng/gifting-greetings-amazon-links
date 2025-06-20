@@ -17,15 +17,18 @@ const Index = () => {
       gifts: [
         {
           key: 'smartWatch',
-          amazonUrl: 'https://amazon.com/dp/B0CHX7R6WJ'
+          amazonUrl: 'https://amazon.com/dp/B0CHX7R6WJ',
+          imageUrl: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop'
         },
         {
           key: 'coffeeSet',
-          amazonUrl: 'https://amazon.com/dp/B08XQZQ6JX'
+          amazonUrl: 'https://amazon.com/dp/B08XQZQ6JX',
+          imageUrl: 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=400&h=300&fit=crop'
         },
         {
           key: 'photoFrame',
-          amazonUrl: 'https://amazon.com/dp/B07XBQBR7B'
+          amazonUrl: 'https://amazon.com/dp/B07XBQBR7B',
+          imageUrl: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop'
         }
       ]
     },
@@ -35,15 +38,18 @@ const Index = () => {
       gifts: [
         {
           key: 'portableSpeaker',
-          amazonUrl: 'https://amazon.com/dp/B0882HHZLW'
+          amazonUrl: 'https://amazon.com/dp/B0882HHZLW',
+          imageUrl: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&h=300&fit=crop'
         },
         {
           key: 'skinCareKit',
-          amazonUrl: 'https://amazon.com/dp/B08TBXNK4L'
+          amazonUrl: 'https://amazon.com/dp/B08TBXNK4L',
+          imageUrl: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=300&fit=crop'
         },
         {
           key: 'bookSet',
-          amazonUrl: 'https://amazon.com/dp/B09XVTPMH9'
+          amazonUrl: 'https://amazon.com/dp/B09XVTPMH9',
+          imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop'
         }
       ]
     },
@@ -53,15 +59,18 @@ const Index = () => {
       gifts: [
         {
           key: 'buildingBlocks',
-          amazonUrl: 'https://amazon.com/dp/B08FD6QLH2'
+          amazonUrl: 'https://amazon.com/dp/B08FD6QLH2',
+          imageUrl: 'https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=400&h=300&fit=crop'
         },
         {
           key: 'artSupplies',
-          amazonUrl: 'https://amazon.com/dp/B08M3K2QXZ'
+          amazonUrl: 'https://amazon.com/dp/B08M3K2QXZ',
+          imageUrl: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop'
         },
         {
           key: 'scienceKit',
-          amazonUrl: 'https://amazon.com/dp/B08CZXXR9M'
+          amazonUrl: 'https://amazon.com/dp/B08CZXXR9M',
+          imageUrl: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=400&h=300&fit=crop'
         }
       ]
     }
@@ -111,6 +120,7 @@ const Index = () => {
                   description={t.gifts[gift.key as keyof typeof t.gifts].description}
                   amazonUrl={gift.amazonUrl}
                   viewOnAmazonText={t.viewOnAmazon}
+                  imageUrl={gift.imageUrl}
                 />
               ))}
             </div>
