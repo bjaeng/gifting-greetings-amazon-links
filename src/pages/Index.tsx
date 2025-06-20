@@ -1,39 +1,70 @@
-
-import React, { useState, useMemo } from 'react';
-import { Gift, LogIn } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
-import GiftCard from '@/components/GiftCard';
-import LanguageToggle from '@/components/LanguageToggle';
-import UserProfile from '@/components/UserProfile';
-import { useAuth } from '@/contexts/AuthContext';
-import { translations, Language } from '@/utils/translations';
-import { generateRandomGifts } from '@/utils/giftGenerator';
+import GiftCard from "@/components/GiftCard";
+import LanguageToggle from "@/components/LanguageToggle";
+import { Button } from "@/components/ui/button";
+import UserProfile from "@/components/UserProfile";
+import { useAuth } from "@/contexts/AuthContext";
+import { generateRandomGifts } from "@/utils/giftGenerator";
+import { Language, translations } from "@/utils/translations";
+import { Gift, LogIn } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Index = () => {
-  const [language, setLanguage] = useState<Language>('en');
-  const { user, loading } = useAuth();
+  const [language, setLanguage] = useState<Language>("en");
+  const { user, loading: authLoading } = useAuth(); // Renamed loading to authLoading to avoid conflict
   const t = translations[language];
+  const [exchangeRateNOK, setExchangeRateNOK] = useState<number | null>(null);
+  const [loadingRate, setLoadingRate] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchExchangeRate = async () => {
+      setLoadingRate(true);
+      try {
+        const response = await fetch(
+          "https://api.exchangerate-api.com/v4/latest/USD"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch exchange rate");
+        }
+        const data = await response.json();
+        const rate = data.rates?.NOK;
+        if (rate) {
+          setExchangeRateNOK(rate);
+        } else {
+          console.error("NOK exchange rate not found in API response");
+          setExchangeRateNOK(null);
+        }
+      } catch (error) {
+        console.error("Error fetching exchange rate:", error);
+        setExchangeRateNOK(null);
+      } finally {
+        setLoadingRate(false);
+      }
+    };
+
+    fetchExchangeRate();
+  }, []);
 
   // Generate random gifts once per session
   const randomGifts = useMemo(() => generateRandomGifts(), []);
 
   const giftData = [
     {
-      category: 'family',
-      gifts: randomGifts.family
+      category: "family",
+      gifts: randomGifts.family,
     },
     {
-      category: 'friends', 
-      gifts: randomGifts.friends
+      category: "friends",
+      gifts: randomGifts.friends,
     },
     {
-      category: 'kids',
-      gifts: randomGifts.kids
-    }
+      category: "kids",
+      gifts: randomGifts.kids,
+    },
   ];
 
-  if (loading) {
+  if (authLoading) {
+    // Use authLoading here
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 flex items-center justify-center">
         <div className="text-white text-xl">Loading...</div>
@@ -57,12 +88,18 @@ const Index = () => {
               </h1>
             </div>
             <div className="flex items-center gap-4">
-              <LanguageToggle currentLanguage={language} onLanguageChange={setLanguage} />
+              <LanguageToggle
+                currentLanguage={language}
+                onLanguageChange={setLanguage}
+              />
               {user ? (
                 <UserProfile />
               ) : (
                 <Link to="/auth">
-                  <Button variant="secondary" className="flex items-center gap-2">
+                  <Button
+                    variant="secondary"
+                    className="flex items-center gap-2"
+                  >
                     <LogIn className="w-4 h-4" />
                     Sign In
                   </Button>
@@ -70,7 +107,7 @@ const Index = () => {
               )}
             </div>
           </div>
-          
+
           <div className="text-center text-white mb-12">
             <h2 className="text-2xl md:text-3xl font-semibold mb-4">
               {t.subtitle}
@@ -79,10 +116,9 @@ const Index = () => {
               {t.description}
             </p>
             <p className="text-sm opacity-75 mt-2">
-              {language === 'en' 
-                ? 'Fresh gift ideas generated for each visit!' 
-                : 'Nye gaveideer genererte for hvert besøk!'
-              }
+              {language === "en"
+                ? "Fresh gift ideas generated for each visit!"
+                : "Nye gaveideer generert for hvert besøk!"}
             </p>
           </div>
         </div>
@@ -100,10 +136,15 @@ const Index = () => {
                 <GiftCard
                   key={gift.key}
                   title={t.gifts[gift.key as keyof typeof t.gifts].title}
-                  description={t.gifts[gift.key as keyof typeof t.gifts].description}
+                  description={
+                    t.gifts[gift.key as keyof typeof t.gifts].description
+                  }
                   amazonUrl={gift.amazonUrl}
                   viewOnAmazonText={t.viewOnAmazon}
                   imageUrl={gift.imageUrl}
+                  priceUSD={gift.priceUSD}
+                  exchangeRateNOK={exchangeRateNOK}
+                  loadingExchangeRate={loadingRate}
                 />
               ))}
             </div>
@@ -117,17 +158,20 @@ const Index = () => {
           <div className="flex justify-center items-center gap-4 mb-4">
             <Gift className="w-5 h-5" />
             <span className="text-sm">
-              {language === 'en' 
-                ? 'Made with love for gift givers everywhere' 
-                : 'Laget med kjærlighet for gavegivere overalt'
-              }
+              {language === "en"
+                ? "Made with love for gift givers everywhere"
+                : "Laget med kjærlighet for gavegivere overalt"}
             </span>
           </div>
           <p className="text-xs opacity-70 mb-2">
-            {language === 'en' 
-              ? 'Amazon links are affiliate links. We may earn a commission from purchases.' 
-              : 'Amazon lenker er tilknyttede lenker. Vi kan tjene provisjon fra kjøp.'
-            }
+            {language === "en"
+              ? "Amazon links are affiliate links. We may earn a commission from purchases."
+              : "Amazon lenker er tilknyttede lenker. Vi kan tjene provisjon fra kjøp."}
+          </p>
+          <p className="text-xs opacity-60">
+            {language === "en"
+              ? "For Google login functionality, connect this project to Supabase for authentication features."
+              : "For Google innlogging funksjonalitet, koble dette prosjektet til Supabase for autentiseringsfunksjoner."}
           </p>
         </div>
       </footer>
