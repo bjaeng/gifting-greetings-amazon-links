@@ -9,16 +9,36 @@ import { Gift, LogIn } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
+interface Holiday {
+  date: string;
+  localName: string;
+  name: string;
+  countryCode: string;
+  fixed: boolean;
+  global: boolean;
+  counties: string[] | null;
+  launchYear: number | null;
+  types: string[];
+}
+
 const Index = () => {
   const [language, setLanguage] = useState<Language>("en");
-  const { user, loading: authLoading } = useAuth(); // Renamed loading to authLoading to avoid conflict
+  const { user, loading: authLoading } = useAuth();
   const t = translations[language];
   const [exchangeRateNOK, setExchangeRateNOK] = useState<number | null>(null);
   const [loadingRate, setLoadingRate] = useState<boolean>(true);
+  const [upcomingHolidaysList, setUpcomingHolidaysList] = useState<
+    { name: string; date: string }[]
+  >([]); // Changed state for a list
+  const [loadingHolidays, setLoadingHolidays] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchExchangeRate = async () => {
+    const fetchAppData = async () => {
+      // Renamed function
       setLoadingRate(true);
+      setLoadingHolidays(true); // Initialize holiday loading state
+
+      // Fetch Exchange Rate
       try {
         const response = await fetch(
           "https://api.exchangerate-api.com/v4/latest/USD"
@@ -40,9 +60,45 @@ const Index = () => {
       } finally {
         setLoadingRate(false);
       }
+
+      // Fetch Holidays
+      try {
+        const currentYear = new Date().getFullYear();
+        const holidayResponse = await fetch(
+          `https://date.nager.at/api/v3/PublicHolidays/${currentYear}/NO`
+        );
+        if (!holidayResponse.ok) {
+          throw new Error("Failed to fetch holidays");
+        }
+        const holidays: Holiday[] = await holidayResponse.json(); // Use Holiday interface
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const upcomingHolidays = holidays
+          .map((h) => ({ ...h, dateObj: new Date(h.date) }))
+          .filter((h) => h.dateObj >= today)
+          .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime());
+
+        if (upcomingHolidays.length > 0) {
+          setUpcomingHolidaysList(
+            // This setter should now correctly target the new state variable
+            upcomingHolidays.slice(0, 3).map((h) => ({
+              name: h.localName || h.name,
+              date: h.date,
+            }))
+          );
+        } else {
+          setUpcomingHolidaysList([]);
+        }
+      } catch (error) {
+        console.error("Error fetching holidays:", error);
+        setUpcomingHolidaysList([]);
+      } finally {
+        setLoadingHolidays(false);
+      }
     };
 
-    fetchExchangeRate();
+    fetchAppData(); // Call the renamed function
   }, []);
 
   // Generate random gifts once per session
@@ -74,6 +130,33 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500">
+      {/* Holiday Banners */}
+      {!loadingHolidays && upcomingHolidaysList.length > 0 && (
+        <div className="sticky top-0 z-50 shadow-md">
+          {upcomingHolidaysList.map((holiday, index) => (
+            <div
+              key={index}
+              className={`p-3 text-center font-semibold ${
+                index === 0
+                  ? "bg-yellow-400 text-yellow-800"
+                  : "bg-yellow-300 text-yellow-700"
+              }`}
+            >
+              {index === 0 ? t.nextHolidayText : t.followedByText}
+              {holiday.name} on{" "}
+              {new Date(holiday.date).toLocaleDateString(
+                language === "no" ? "nb-NO" : "en-GB",
+                {
+                  day: "numeric",
+                  month: "long",
+                }
+              )}
+              !
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-black/20"></div>
