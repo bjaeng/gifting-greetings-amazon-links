@@ -27,6 +27,18 @@ export const translations = {
         title: "Digital Photo Frame",
         description: "Display precious family memories in high resolution"
       },
+      kitchenAppliance: {
+        title: "Kitchen Appliance",
+        description: "High-quality appliances for the home chef"
+      },
+      plantPot: {
+        title: "Decorative Plant Pot",
+        description: "Beautiful planters for green-thumb family members"
+      },
+      blanket: {
+        title: "Cozy Throw Blanket",
+        description: "Soft and warm blankets for comfort and relaxation"
+      },
       // Friends gifts
       portableSpeaker: {
         title: "Portable Bluetooth Speaker",
@@ -40,6 +52,18 @@ export const translations = {
         title: "Bestseller Book Collection",
         description: "Carefully selected page-turners for book lovers"
       },
+      candles: {
+        title: "Scented Candle Set",
+        description: "Aromatic candles to create a relaxing atmosphere"
+      },
+      teaSet: {
+        title: "Gourmet Tea Collection",
+        description: "Premium teas from around the world"
+      },
+      phoneAccessory: {
+        title: "Phone Accessories",
+        description: "Stylish and functional accessories for smartphones"
+      },
       // Kids gifts
       buildingBlocks: {
         title: "Creative Building Blocks",
@@ -52,6 +76,18 @@ export const translations = {
       scienceKit: {
         title: "Science Experiment Kit",
         description: "Hands-on learning with safe, fun experiments"
+      },
+      puzzleGame: {
+        title: "Educational Puzzle",
+        description: "Mind-challenging puzzles for developing problem-solving skills"
+      },
+      toyRobot: {
+        title: "Interactive Robot Toy",
+        description: "Fun and educational robotic toys for tech-savvy kids"
+      },
+      musicToy: {
+        title: "Musical Instrument Set",
+        description: "Introduce children to the joy of making music"
       }
     },
     language: "Language",
@@ -84,6 +120,18 @@ export const translations = {
         title: "Digital Bilderamme",
         description: "Vis dyre familieminner i høy oppløsning"
       },
+      kitchenAppliance: {
+        title: "Kjøkkenutstyr",
+        description: "Høykvalitets apparater for hjemmekokken"
+      },
+      plantPot: {
+        title: "Dekorativ Plantepotte",
+        description: "Vakre potter for familiemedlemmer med grønne fingre"
+      },
+      blanket: {
+        title: "Koselig Pledd",
+        description: "Myke og varme pledd for komfort og avslapning"
+      },
       // Friends gifts
       portableSpeaker: {
         title: "Bærbar Bluetooth Høyttaler",
@@ -97,6 +145,18 @@ export const translations = {
         title: "Bestselger Boksamling",
         description: "Nøye utvalgte sidevendere for bokelsker"
       },
+      candles: {
+        title: "Duftlyssett",
+        description: "Aromatiske lys for å skape en avslappende atmosfære"
+      },
+      teaSet: {
+        title: "Gourmet Tesamling",
+        description: "Premium teer fra hele verden"
+      },
+      phoneAccessory: {
+        title: "Telefontilbehør",
+        description: "Stilige og funksjonelle tilbehør for smarttelefoner"
+      },
       // Kids gifts
       buildingBlocks: {
         title: "Kreative Byggeklosser",
@@ -109,6 +169,18 @@ export const translations = {
       scienceKit: {
         title: "Vitenskapseksperiment Sett",
         description: "Praktisk læring med trygge, morsomme eksperimenter"
+      },
+      puzzleGame: {
+        title: "Lærerikt Puslespill",
+        description: "Utfordrende puslespill for å utvikle problemløsningsferdigheter"
+      },
+      toyRobot: {
+        title: "Interaktiv Robot Leke",
+        description: "Morsomme og lærerike robotleker for teknologiinteresserte barn"
+      },
+      musicToy: {
+        title: "Musikkinstrument Sett",
+        description: "Introduser barn for gleden ved å lage musikk"
       }
     },
     language: "Språk",

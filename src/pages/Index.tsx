@@ -1,78 +1,31 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Gift, Youtube } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import GiftCard from '@/components/GiftCard';
 import LanguageToggle from '@/components/LanguageToggle';
 import { translations, Language } from '@/utils/translations';
+import { generateRandomGifts } from '@/utils/giftGenerator';
 
 const Index = () => {
   const [language, setLanguage] = useState<Language>('en');
   const t = translations[language];
 
+  // Generate random gifts once per session
+  const randomGifts = useMemo(() => generateRandomGifts(), []);
+
   const giftData = [
-    // Family gifts
     {
       category: 'family',
-      gifts: [
-        {
-          key: 'smartWatch',
-          amazonUrl: 'https://amazon.com/dp/B0CHX7R6WJ',
-          imageUrl: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop'
-        },
-        {
-          key: 'coffeeSet',
-          amazonUrl: 'https://amazon.com/dp/B08XQZQ6JX',
-          imageUrl: 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=400&h=300&fit=crop'
-        },
-        {
-          key: 'photoFrame',
-          amazonUrl: 'https://amazon.com/dp/B07XBQBR7B',
-          imageUrl: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop'
-        }
-      ]
+      gifts: randomGifts.family
     },
-    // Friends gifts
     {
-      category: 'friends',
-      gifts: [
-        {
-          key: 'portableSpeaker',
-          amazonUrl: 'https://amazon.com/dp/B0882HHZLW',
-          imageUrl: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&h=300&fit=crop'
-        },
-        {
-          key: 'skinCareKit',
-          amazonUrl: 'https://amazon.com/dp/B08TBXNK4L',
-          imageUrl: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=300&fit=crop'
-        },
-        {
-          key: 'bookSet',
-          amazonUrl: 'https://amazon.com/dp/B09XVTPMH9',
-          imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop'
-        }
-      ]
+      category: 'friends', 
+      gifts: randomGifts.friends
     },
-    // Kids gifts
     {
       category: 'kids',
-      gifts: [
-        {
-          key: 'buildingBlocks',
-          amazonUrl: 'https://amazon.com/dp/B08FD6QLH2',
-          imageUrl: 'https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=400&h=300&fit=crop'
-        },
-        {
-          key: 'artSupplies',
-          amazonUrl: 'https://amazon.com/dp/B08M3K2QXZ',
-          imageUrl: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop'
-        },
-        {
-          key: 'scienceKit',
-          amazonUrl: 'https://amazon.com/dp/B08CZXXR9M',
-          imageUrl: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=400&h=300&fit=crop'
-        }
-      ]
+      gifts: randomGifts.kids
     }
   ];
 
@@ -100,6 +53,12 @@ const Index = () => {
             </h2>
             <p className="text-lg md:text-xl opacity-90 max-w-2xl mx-auto">
               {t.description}
+            </p>
+            <p className="text-sm opacity-75 mt-2">
+              {language === 'en' 
+                ? 'Fresh gift ideas generated for each visit!' 
+                : 'Nye gaveideer generert for hvert besøk!'
+              }
             </p>
           </div>
         </div>
@@ -140,10 +99,16 @@ const Index = () => {
               }
             </span>
           </div>
-          <p className="text-xs opacity-70">
+          <p className="text-xs opacity-70 mb-2">
             {language === 'en' 
               ? 'Amazon links are affiliate links. We may earn a commission from purchases.' 
               : 'Amazon lenker er tilknyttede lenker. Vi kan tjene provisjon fra kjøp.'
+            }
+          </p>
+          <p className="text-xs opacity-60">
+            {language === 'en' 
+              ? 'For Google login functionality, connect this project to Supabase for authentication features.' 
+              : 'For Google innlogging funksjonalitet, koble dette prosjektet til Supabase for autentiseringsfunksjoner.'
             }
           </p>
         </div>
